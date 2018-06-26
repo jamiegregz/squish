@@ -33,10 +33,12 @@
 
         public function squish($url) {
             // TODO: Tame the URL
+
+            $this->long_url = $url;
+
             // Check if the URL already exists in the DB
             if($result = $this->db->get_from_url($url)) {
                 // So, the URL already exists, set it on this object
-                $this->long_url = $result["long_url"];
                 $this->squished_url = "http://squish.li/{$result["short_id"]}";
             } else {
                 // Generate a Random URL
@@ -48,6 +50,17 @@
             }
         }
 
+        public function find_from_id($id) {
+            if($result = $this->db->get_from_short_id($id)) {
+                $this->short_id = $id;
+                $this->long_url = $result["long_url"];
+                $this->squished_url = "http://squish.li/{$id}";
+
+                return true;
+            }
+
+            return false;
+        }
 
         public function get_squished_url() {
             return $this->squished_url;
